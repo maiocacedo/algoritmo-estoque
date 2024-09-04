@@ -7,15 +7,15 @@
 *- DECORAÇÃO
 *- MENU DE OPÇÕES
 *- CALCULO DE VENDAS
-*- PRODUTO COM MAIOR QUANTIDADE
-*- PRODUTO COM MENOR QUANTIDADE
 *- SISTEMA DE DESCONTO
 *- SANITIZAÇÃO DE INPUT
-*- COMENTAR PELO AMOR DE DEUS!!!!!!!!!!!!!!!!!!!!!!
+*- COMENTAR PELO AMOR DE DEUS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 >FEITO:
 !- INSERÇÃO DE DADOS
 !- CALCULO DE LUCRO
+!- PRODUTO COM MAIOR QUANTIDADE
+!- PRODUTO COM MENOR QUANTIDADE
 */
 
 // struct para definir um tipo de Produto
@@ -25,6 +25,7 @@ typedef struct
     float valor_compra;
     float valor_venda;
     int numero_vendas;
+    int numero_estoque;
 } Produto;
 
 int main()
@@ -32,9 +33,15 @@ int main()
     int num_produtos;
 
     printf("Bem-vindo ao SEI (Sistema de Estoque Integrado)!\n\n");
-
+    
     printf("Digite o número de produtos a ser inseridos: ");
     scanf("%d", &num_produtos);
+    while (num_produtos <= 0)
+    {
+        printf("Digite um número de produtos validos a ser inseridos: ");
+        scanf("%d", &num_produtos);
+    }
+    
 
     // matriz de produtos de tipo Produto
     Produto produtos[num_produtos];
@@ -52,6 +59,25 @@ int main()
         scanf("%f", &produtos[i].valor_venda);
         printf(">Número de vendas: ");
         scanf("%d", &produtos[i].numero_vendas);
+        printf(">Quantidade em estoque: ");
+        scanf("%d", &produtos[i].numero_estoque);
+        while (produtos[i].numero_estoque < 0 || (produtos[i].numero_estoque == 0 && produtos[i].numero_vendas == 0))
+        {
+        printf("\n\nProduto invalido\nDigite novamente as informações do produto %d:\n", i + 1);
+
+        // definir as variáveis do struct
+        printf(">Nome: ");
+        scanf(" %[^\n]", produtos[i].nome);
+        printf(">Valor de compra: ");
+        scanf("%f", &produtos[i].valor_compra);
+        printf(">Valor de venda: ");
+        scanf("%f", &produtos[i].valor_venda);
+        printf(">Número de vendas: ");
+        scanf("%d", &produtos[i].numero_vendas);
+        printf(">Quantidade em estoque: ");
+        scanf("%d", &produtos[i].numero_estoque);
+        }
+        
     }
 
     // define os produtos de maior e menor lucro e vendas
@@ -83,5 +109,45 @@ int main()
             menor_lucro = lucro_atual;
             produto_menor_lucro = produtos[i];
         }
+    }
+
+    
+    int aux; // variavel auxiliar para mudar posicao
+    int j; // indiceMudança
+    
+while (j != 0){
+
+        // Definindo j = 0, ainda não ouve mudanças
+        j = 0;
+
+        // for para percorrer o vetor comparando os valores dos indices.
+        for (int i = 0; i < num_produtos; i++){
+
+            // Checando se o indice i e maior que o proximo indice
+            if (produtos[i].numero_estoque > produtos[i+1].numero_estoque){
+
+                // Trocando os indices de posição
+                aux = produtos[i].numero_estoque;
+                produtos[i].numero_estoque = produtos[i+1].numero_estoque;
+                produtos[i+1].numero_estoque = aux;
+
+                // Definindo j = 1, pois ouve mudanças
+                j = 1;
+            }
+        }
+
+    } 
+    // exibindo o top 3 produtos com maior e menor estoque.
+    if (num_produtos>= 3){
+        printf("Menor quantidade: 1o %s: %d em estoque;\n 2o %s: %d em estoque;\n 3o %s: %d em estoque.\n\n", produtos[0].nome, produtos[0].numero_estoque,produtos[1].nome, produtos[1].numero_estoque,produtos[2].nome, produtos[2].numero_estoque);
+        printf("Maior quantidade: 1o %s: %d em estoque;\n 2o %s: %d em estoque;\n 3o %s: %d em estoque.\n\n", produtos[num_produtos-1].nome,produtos[num_produtos-1].numero_estoque,produtos[num_produtos-2].nome, produtos[num_produtos-2].numero_estoque, produtos[num_produtos-3].nome,produtos[num_produtos-3].numero_estoque);
+    }
+    else if (num_produtos = 2){
+        printf("Menor quantidade: 1o %s: %d em estoque;\n 2o %s %d em estoque;\n\n", produtos[0].nome, produtos[0].numero_estoque, produtos[1].nome,produtos[1].numero_estoque);
+        printf("Maior quantidade: 1o %s: %d em estoque;\n 2o %s %d em estoque;\n\n", produtos[num_produtos-1].nome,produtos[num_produtos-1].numero_estoque,produtos[num_produtos-2].nome, produtos[num_produtos-2].numero_estoque);
+    }
+    else if (num_produtos < 2){
+        printf("Menor quantidade: 1o %s: %d em estoque;\n\n", produtos[0].nome, produtos[0].numero_estoque);
+        printf("Maior quantidade: 1o %s: %d em estoque.\n\n", produtos[num_produtos-1].nome, produtos[num_produtos-1].numero_estoque);
     }
 }
